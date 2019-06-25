@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sandman.filmCrawler.mapper.filmMapper">
+
+    <resultMap id="filmMap" type="com.sandman.filmCrawler.Film" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="film_name" property="filmName" jdbcType="VARCHAR" />
+        <result column="film_url" property="filmUrl" jdbcType="VARCHAR" />
+        <result column="magnet_url" property="magnetUrl" jdbcType="VARCHAR" />
+        <result column="thunder_url" property="thunderUrl" jdbcType="VARCHAR" />
+        <result column="pan_url" property="panUrl" jdbcType="VARCHAR" />
+        <result column="pan_password" property="panPassword" jdbcType="VARCHAR" />
+        <result column="film_image" property="filmImage" jdbcType="VARCHAR" />
+        <result column="film_actor" property="filmActor" jdbcType="VARCHAR" />
+        <result column="film_type" property="filmType" jdbcType="INTEGER" />
+        <result column="film_time" property="filmTime" jdbcType="VARCHAR" />
+        <result column="film_clarity" property="filmClarity" jdbcType="VARCHAR" />
+        <result column="film_area" property="filmArea" jdbcType="VARCHAR" />
+        <result column="film_director" property="filmDirector" jdbcType="VARCHAR" />
+        <result column="film_language" property="filmLanguage" jdbcType="VARCHAR" />
+        <result column="film_desc" property="filmDesc" jdbcType="VARCHAR" />
+        <result column="film_gold" property="filmGold" jdbcType="INTEGER" />
+        <result column="buy_count" property="buyCount" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="del_flag" property="delFlag" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="getNeedUpdateImage" resultMap="filmMap">
+        select * from t_film where film_image is null
+    </select>
+
+    <select id="getAllFilms" resultMap="filmMap">
+        select * from t_film
+    </select>
+
+    <update id="updateFilmImage" parameterType="com.sandman.filmCrawler.Film">
+        update t_film set film_image=#{filmImage,jdbcType=VARCHAR} where id=#{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="getRecentlyDate" resultMap="filmMap">
+        select * from t_film order by create_time desc LIMIT 0, 1
+    </select>
+    <insert id="insertFilm" parameterType="com.sandman.filmCrawler.Film">
+        insert into t_film (film_name, film_url, magnet_url,
+          thunder_url,pan_url,pan_password,
+          film_image, film_actor, film_type,
+          film_time, film_clarity, film_area,
+          film_director, film_language, film_desc,
+          film_gold, buy_count, `status`,
+          create_time, update_time, del_flag
+        )
+        values (#{filmName,jdbcType=VARCHAR}, #{filmUrl,jdbcType=VARCHAR},#{magnetUrl,jdbcType=VARCHAR},
+          #{thunderUrl,jdbcType=VARCHAR},#{panUrl,jdbcType=VARCHAR},#{panPassword,jdbcType=VARCHAR},
+          #{filmImage,jdbcType=VARCHAR}, #{filmActor,jdbcType=VARCHAR}, #{filmType,jdbcType=INTEGER},
+          #{filmTime,jdbcType=VARCHAR}, #{filmClarity,jdbcType=VARCHAR}, #{filmArea,jdbcType=VARCHAR},
+          #{filmDirector,jdbcType=VARCHAR}, #{filmLanguage,jdbcType=VARCHAR}, #{filmDesc,jdbcType=VARCHAR},
+          #{filmGold,jdbcType=INTEGER}, #{buyCount,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+          #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=INTEGER}
+      )
+    </insert>
+
+    <update id="formatStr" parameterType="com.sandman.filmCrawler.Film">
+        update t_film set film_actor=#{filmActor,jdbcType=VARCHAR},film_desc=#{filmDesc,jdbcType=VARCHAR} where id=#{id,jdbcType=INTEGER}
+    </update>
+</mapper>
